@@ -21,6 +21,7 @@ If validation, the Docker build, or the container test fails, deployment does no
 Successful workflow run:
 
 ADD QA WORKFLOW LINK HERE
+https://github.com/ab2737/angelo-selfhost-cicd/actions/runs/37822988324
 
 Deployed commit/image:
 
