@@ -65,22 +65,30 @@ https://qa.angelobustamanteselfhost.com
 After verification, the `qa` branch will be merged into `main` and the same change will be deployed to:
 
 https://angelobustamanteselfhost.com
-## Test Evidence
+### SSH Security Evidence
 
-### QA Website
-![QA Website](evidence/qa-website.png)
+**SSH Authentication:**
 
-### Production Website
-![Production Website](evidence/production-website.png)
+![SSH Authentication](authentication%20screenshot.png)
 
-### Successful QA Workflow
-![QA Workflow](evidence/qa-workflow.png)
+**Permission Denied Test:**
 
-### Successful Production Workflow
-![Production Workflow](evidence/production-workflow.png)
+![Permission Denied](permision%20denied%20screenshot.png)
 
-### SSH Key Login
-![SSH Login](evidence/ssh-login.png)
+### QA and Production Deployment Evidence
 
-### SSH Security Settings
-![SSH Settings](evidence/ssh-settings.png)
+**QA GitHub Actions:**
+
+![QA GitHub Actions](qa%20github.png)
+
+**QA Version 2 GitHub Actions:**
+
+![QA Version 2 GitHub Actions](qu%20v2%20github.png)
+
+**QA Version 2 Website:**
+
+![QA Version 2](qu%20v2.png)
+
+**QA Website:**
+
+![QA Website](qu%20website.png)
