@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Angelo Bustamante | Sales planning & analytics</title>
+<style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#faf8f1;color:#163b38;font:17px/1.6 system-ui,sans-serif}main,nav{max-width:920px;margin:auto;padding:20px clamp(18px,5vw,54px)}nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #bcbfb4}nav strong{margin-right:auto}a{color:#126156}h1,h2,h3{font-family:Georgia,serif;line-height:1.12}h1{font-size:clamp(48px,9vw,88px);margin:34px 0 18px}h2{font-size:36px}header{padding:24px 0 35px}header p{max-width:620px;font-size:21px}section{padding:16px 0 30px;border-top:1px solid #bcbfb4}article,details{padding:18px;background:white;border:1px solid #d9d8cc;margin:12px 0}article h3{margin:4px 0;font-size:24px}button,input{font:inherit;padding:10px;border:1px solid #547772;border-radius:4px}button{background:#154c46;color:white;cursor:pointer}input{width:100%;margin:8px 0}button:disabled{opacity:.45}small{color:#4c615b}summary{cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}</style>
+<nav><strong>Angelo Bustamante</strong><a href="#projects">Projects</a><a href="#assistant">Academic Assistant</a><a href="#evidence">Evidence</a></nav><main>
+<header><h1>Sales planning<br>&amp; analytics</h1><p>I’m Angelo Bustamante. I’m interested in how sales teams use cost estimates and margin analysis to make pricing decisions.</p></header>
+<section id="projects"><h2>Selected projects</h2><article><small>Finance case study · Planned</small><h3>What happens to margin when freight costs rise?</h3><p>I plan to build a finished-goods cost model that lets a sales team change freight assumptions and compare the resulting margin per unit. The workbook and findings are still planned.</p><p>Gellert Global Group’s Sales Planning Analyst posting emphasized import costing and profitability. That finding shaped my decision to lead this portfolio with a pricing question a sales manager might actually ask.</p><a href="https://github.com/ab2737/individual-portfolio-rag-app">View my career research</a></article>
+<article><small>Individual RAG app · Working prototype</small><h3>Academic Assistant</h3><p>Look up how to request a transcript, contact transcript support, or find an academic calendar using short notes linked to NJIT’s Registrar.</p><a href="#assistant">Try the assistant ↓</a></article></section>
+<section id="assistant"><h2>Academic Assistant</h2><p>Import the three source notes to start. The index and chat history last until this page reloads.</p><button id="importBtn">Import Registrar notes</button> <span role="status" id="status"></span>
+<form id="chat"><label for="question">Ask about the imported notes</label><input required id="question" maxlength="350" placeholder="Where can I order an official transcript?"><button id="ask" disabled>Ask question</button></form><div id="answers" aria-live="polite"></div></section>
+<section id="evidence"><h2>Build evidence</h2><p>Each original project note summarizes a public resource and links back to NJIT. One topic forms one chunk. The prototype uses sparse word vectors and cosine similarity, then quotes the retrieved note. It has no external language model, persistent database, or official advising function.</p>
+<details id="sources"><summary>Source and import record</summary><div id="records"></div></details>
+<details id="representation"><summary>Sample indexed chunk</summary><pre id="sample"></pre></details>
+<details id="trace"><summary>Example query and answer trace</summary><pre id="example"></pre></details>
+<details id="checks"><summary>Run retrieval and citation checks</summary><pre id="checkLog"></pre></details></section></main>
+<script>const notes=[
+ {id:"REG-1",topic:"where request order official transcript academic record",text:"Current students and alumni can order an official NJIT transcript through the National Student Clearinghouse.",url:"https://www.njit.edu/registrar/transcript"},
+ {id:"REG-2",topic:"who contact email help transcript question",text:"For help with a transcript request, email transcripts@njit.edu.",url:"https://www.njit.edu/registrar/transcript"},
+ {id:"REG-3",topic:"where semester dates academic calendar schedule holidays",text:"Use the Registrar’s Academic Calendars page to find the calendar for your semester.",url:"https://www.njit.edu/registrar/calendars"}
+];
+const ignored=new Set("a an the is are can i my to do of for about me how what find get njit".split(" "));
+function terms(value){return [...new Set(value.toLowerCase().replace(/transcripts/g,"transcript").split(/[^a-z]+/).filter(w=>w&&!ignored.has(w)))];}
+function ingest(rows){return rows.map(row=>({...row,vector:terms(row.topic+" "+row.text)}));}
+function retrieve(question,index){
+ const query=terms(question);
+ const ranked=index.map(chunk=>{
+ const hits=query.filter(word=>chunk.vector.includes(word)).length;
+ return {chunk,hits,score:hits/Math.sqrt(Math.max(1,query.length)*chunk.vector.length)};
+ }).sort((a,b)=>b.score-a.score);
+ const top=ranked[0];
+ return top&&top.hits>=2&&top.hits/query.length>=0.75?top:null;
+}
+const cases=[["Where can I order an official transcript?","REG-1"],["Where can I get my academic record?","REG-1"],["Who can I email about a transcript?","REG-2"],["Where can I find semester dates?","REG-3"],["What GPA earns a scholarship?",null],["What is the transcript fee?",null]];
+
+const el=id=>document.getElementById(id);
+let index=[];
+function trace(q,rows){
+ const hit=retrieve(q,rows);
+ return hit?{question:q,answer:hit.chunk.text,citation:hit.chunk.id,source:hit.chunk.url,score:Number(hit.score.toFixed(3))}:{question:q,answer:"The imported notes do not provide enough information to answer that question."};
+}
+for(const note of notes){
+ const p=document.createElement("p"),a=document.createElement("a");
+ a.href=note.url;a.textContent="NJIT source";p.append(note.id+" · "+note.text+" ",a);el("records").append(p);
+}
+const demo=ingest(notes);
+el("sample").textContent=JSON.stringify(demo[0],null,2);
+el("example").textContent=JSON.stringify(trace(cases[0][0],demo),null,2);
+el("checkLog").textContent=cases.map(([q,expected])=>{
+ const actual=trace(q,demo), ref=notes.find(n=>n.id===expected);
+ const ok=ref?actual.citation===expected&&actual.answer===ref.text&&actual.source===ref.url:!actual.citation;
+ return (ok?"PASS":"FAIL")+" · "+q+"\nExpected "+(expected||"abstention")+" · observed "+(actual.citation||"abstention");
+}).join("\n\n");
+el("importBtn").onclick=()=>{index=ingest(notes);el("status").textContent=index.length+" chunks indexed for this session.";el("ask").disabled=false;el("question").focus();};
+el("chat").onsubmit=e=>{
+ e.preventDefault();const q=el("question").value.trim();if(!q||!index.length)return;
+ const res=trace(q,index),box=document.createElement("article"),h=document.createElement("h3"),p=document.createElement("p");
+ h.textContent=q;p.textContent=res.answer;box.append(h,p);
+ if(res.source){const a=document.createElement("a");a.href=res.source;a.textContent="Verify "+res.citation+" at NJIT";box.append(a);}
+ el("answers").prepend(box);el("question").value="";
+};
+function openEvidence(){const target=document.getElementById(location.hash.slice(1));if(target?.tagName==="DETAILS")target.open=true;}
+openEvidence();window.addEventListener("hashchange",openEvidence);
+</script></html>
