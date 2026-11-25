@@ -16,5 +16,5 @@ Checked: Six retrieval checks passed against the prototype logic. Four questions
 
 [Source and import record](https://angelobustamanteselfhost.com/portfolio/#sources) · [Sample chunk](https://angelobustamanteselfhost.com/portfolio/#representation) · [Query and answer trace](https://angelobustamanteselfhost.com/portfolio/#trace) · [Checks](https://angelobustamanteselfhost.com/portfolio/#checks)
 
-Next: Verify these intended URLs after deployment, expand evaluation to the planned 20 questions and test misleading near-matches. Public hosting has not been verified.
+I verified that the production portfolio loads on my domain. All six built-in checks passed on QA
 
