@@ -38,9 +38,9 @@ to the browser profile and site address.
 
 ### Manual checks
 
-- Repeat import — [Enter the count you observed before and after clicking Import again.]
-- Citation verification — [Describe what you found when you opened the NJIT pages and compared them with REG-1, REG-2, and REG-3.]
-- Permissions — The import accepts three bundled summaries. [Record whether the source pages opened while signed out and whether the app requested a login or private student information.]
+- **Repeat import:** Before I clicked Import Registrar notes again, the app displayed 3 chunks indexed. After the second import, the count stayed at 3. The repeat import did not add duplicates.
+- **Citation verification:** I opened the NJIT links and compared each note with its source. REG-1 matched the instructions for ordering an official transcript through the National Student Clearinghouse. REG-2 matched the transcript contact email, `transcripts@njit.edu`. REG-3 linked to NJIT’s Academic Calendars page, where students can find semester dates.
+- **Permissions:** I opened the cited NJIT pages while signed out. The app imported only the three bundled Registrar summaries. I could import them and ask questions without logging in or providing private student information.
 
 ### Screenshot evidence
 
