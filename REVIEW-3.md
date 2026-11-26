@@ -36,6 +36,16 @@ to the browser profile and site address.
 [Production CI run](https://github.com/ab2737/angelo-selfhost-cicd/actions/runs/45774162055) ·
 [Source and import record](https://angelobustamanteselfhost.com/portfolio/#sources)
 
+### Design choices, limits, and my contribution
+
+I considered ChromaDB and learned embeddings, but I chose word-based retrieval because I had three short Registrar notes and an existing static site. This let me check exactly which note supplied each answer. One limit is that a student can ask a relevant question using different words and get an insufficient-information response. Saving the notes in browser storage also means the import is available only in the same browser profile on the same site.
+
+I used ChatGPT to help draft the portfolio code and organize the testing steps. I committed the changes, tested the portfolio with a keyboard and phone, checked the citations and repeat import, and verified that the local and hosted app restored the notes after reopening. I also checked the production workflow and captured the screenshots in this record.
+
+[Career research and original plan](https://github.com/ab2737/individual-portfolio-rag-app) ·
+[Earlier technical research and alternatives](https://github.com/ab2737/angelo-selfhost-cicd/blob/main/REVIEW-2.md#2-individual-rag-app--technical-research) ·
+[Portfolio and app code at the tested release](https://github.com/ab2737/angelo-selfhost-cicd/blob/a7d73bf82d3df4fa6ce359c8a0ad0f3b9338f07d/portfolio/index.html)
+
 ### Manual checks
 
 - **Repeat import:** Before I clicked Import Registrar notes again, the app displayed 3 chunks indexed. After the second import, the count stayed at 3. The repeat import did not add duplicates.
